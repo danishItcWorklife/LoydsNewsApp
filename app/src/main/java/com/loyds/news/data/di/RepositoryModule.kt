@@ -32,7 +32,7 @@ object RepositoryModule {
     @Provides
     fun provideRepository(
         remoteDataSource: ApiHelper,
-        localDataSource: NewsDao,
+        localDataSource: NewsDatabase,
         networkHelper: NetworkHelper,
     ) = NewsRepositoryImpl(remoteDataSource, networkHelper, localDataSource)
 

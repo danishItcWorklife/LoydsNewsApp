@@ -1,7 +1,8 @@
 package com.loyds.news.data.repository
 
 
-import com.loyds.news.data.local.NewsDao
+import androidx.room.withTransaction
+import com.loyds.news.data.local.NewsDatabase
 import com.loyds.news.data.model.NewsArticle
 import com.loyds.news.data.network.api.ApiHelper
 import com.loyds.news.domain.repository.NewsRepository
@@ -12,7 +13,7 @@ import javax.inject.Inject
 class NewsRepositoryImpl @Inject constructor(
     private val remoteDataSource: ApiHelper,
     private val networkUtil: NetworkHelper,
-    private val localDataSource: NewsDao
+    private val newsDatabase: NewsDatabase
 ) : NewsRepository {
     override suspend fun getNews(
         countryCode: String, category: String,
@@ -23,13 +24,16 @@ class NewsRepositoryImpl @Inject constructor(
             try {
                 val response = remoteDataSource.getNews(countryCode, category, pageNumber)
                 val result = response.body()
+                val newsDao = newsDatabase.getNewsDao()
                 if (response.isSuccessful && result != null) {
                     if (result.status == "ok") {
                         // Saving news articles to the local database for offline access
-                        result.articles.forEach { article ->
-                            article.category = category
-                            localDataSource.upsert(article)
-                        }
+                             newsDao.deleteByCategory(category)
+                            result.articles.forEach { article ->
+                                article.category = category
+                                newsDao.upsert(article)
+                            }
+
                         DataState.Success(result.articles)
                     } else {
                         DataState.Error("An error occurred")
@@ -43,7 +47,8 @@ class NewsRepositoryImpl @Inject constructor(
         } else {
             // When the network is not available, fetch data from the local data source
             try {
-                val cachedNews = localDataSource.getNewsByCategory(category)
+                val newsDao = newsDatabase.getNewsDao()
+                val cachedNews = newsDao.getNewsByCategory(category)
                 if (cachedNews.isNotEmpty()) {
                     DataState.Success(cachedNews)
                 } else {

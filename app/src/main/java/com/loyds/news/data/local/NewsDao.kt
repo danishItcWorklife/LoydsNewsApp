@@ -21,7 +21,7 @@ interface NewsDao {
 
     @Transaction
     suspend fun upsert(newsArticle: NewsArticle) {
-        val existingArticle = getArticleByUrl(newsArticle.url ?: "")
+         val existingArticle = getArticleByUrl(newsArticle.url ?: "")
         if (existingArticle == null) {
             insert(newsArticle)
         } else {
@@ -32,5 +32,6 @@ interface NewsDao {
     @Query("SELECT * FROM news_articles WHERE category = :category")
     suspend fun getNewsByCategory(category: String): List<NewsArticle>
 
-
+    @Query("DELETE FROM news_articles WHERE category = :category")
+    suspend fun deleteByCategory(category: String)
 }
