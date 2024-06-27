@@ -25,7 +25,8 @@ This app utilizes Jetpack Compose for building the UI.
 The model is generated from JSON data into Kotlin data classes. Additionally, entity classes are used for Room database with type converters for custom object data storage and retrieval.
 
 ### ViewModel
-`MainViewModel.kt` is utilized for fetching today's news and communicates network call status (Loading, Success, Error) using a sealed class.
+`NewsListViewModel.kt` is utilized for fetching today's news and communicates network call status (Loading, Success, Error) using a sealed class.
+`NewsDetailViewModel.kt` is utilized for displaying news detail.
 
 ### Dependency Injection
 The app employs Dagger Hilt for dependency injection. The `ApplicationModule.kt` class provides singleton references for Retrofit, OkHttpClient, Repository, etc.
