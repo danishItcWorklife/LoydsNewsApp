@@ -11,8 +11,6 @@ import com.loyds.news.data.model.NewsArticle
 import com.loyds.news.presentation.screens.NewsDetailScreen
 import com.loyds.news.presentation.screens.NewsListScreen
 import com.loyds.news.utils.Utilities
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun Navigation() {
