@@ -1,4 +1,4 @@
-package com.loyds.news.ui.theme
+package com.loyds.news.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -5,9 +5,45 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.8.2"
+lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 composeBom = "2023.08.00"
+gson = "2.9.0"
+
+#roomdependencies
+room = "2.6.1"
+
+#hiltdaggerdependencies
+dagger_hilt = "2.51.1"
+hilt-navigation = "1.0.0"
+
+okhttp = "4.10.0"
+retrofit = "2.9.0"
+
+#lifecycle-aware components
+lifecycle = "2.6.1"
+lifecycle_extension = "2.2.0"
+androidx_arch_core = "2.1.0"
+
+#coroutines support libraries for kotlin
+kotlinxcoroutines = "1.7.3"
+
+#mockitodependencies
+mockk-version = "1.12.1"
+mockitoKotlin = "2.2.0"
+
+#assertions
+#mockito mock objects library core api and implementation
+mockito = "5.12.0"
+
+#biometricdependencies
+biometric = "1.1.0"
+
+#glideDependencies
+glide-version = "1.0.0-alpha.1"
+
+#navigationComposeDependencies
+navigation-version = "2.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -23,9 +59,57 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+#RoomDependencies
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+
+#HiltDaggerDependencies
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger_hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "dagger_hilt" }
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
+#NetworkingRetrofitDependencies
+retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+gson-core = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+gson-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+okhttp-urlconnection = { group = "com.squareup.okhttp3", name = "okhttp-urlconnection", version.ref = "okhttp" }
+okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
+
+#GlideDependencies
+glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide-version" }
+
+#navigationComposeDependencies
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-version" }
+
+#LifeCycleKtxDependencies
+android-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidx_arch_core" }
+viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-extension = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycle_extension" }
+viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle" }
+lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
+lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
+
+#CoroutinesDependencies
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxcoroutines" }
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxcoroutines" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxcoroutines" }
+
+#TestingDependencies
+test-mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk-version" }
+truth = { group = "com.google.truth", name = "truth", version = "1.0.1" }
+nhaarman = { group = "com.nhaarman.mockitokotlin2", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.15" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+kotlin-kapt-plugin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "dagger_hilt" }
