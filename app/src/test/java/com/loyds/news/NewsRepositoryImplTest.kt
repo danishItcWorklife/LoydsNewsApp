@@ -45,7 +45,7 @@ class NewsRepositoryImplTest {
         Dispatchers.setMain(dispatcher)
         every { newsDatabase.getNewsDao() } returns newsDao
         newsRepositoryImpl = NewsRepositoryImpl(remoteDataSource, networkUtil, newsDatabase)
-    }
+     }
 
     @After
     fun tearDown() {
@@ -61,7 +61,7 @@ class NewsRepositoryImplTest {
 
         // Mock API response
         val articles = FakeDataUtil.getFakeArticles()
-        val response = NewsResponse(status = "ok", articles = articles, totalResults = 20)
+        val response = NewsResponse(status = "ok", articles = articles, totalResults = 2)
         coEvery { remoteDataSource.getNews(any(), any(), any()) } returns Response.success(response)
         coEvery { newsDao.deleteByCategory(Constants.Category) } returns Unit
         // Mock local database operation
