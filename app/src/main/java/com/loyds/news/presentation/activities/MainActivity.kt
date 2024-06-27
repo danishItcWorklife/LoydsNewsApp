@@ -29,27 +29,39 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         executor = ContextCompat.getMainExecutor(this)
 
-        setPrompt()
-        if (Utilities.isBiometricHardWareAvailable(this)) {
-            initBiometricPrompt(
-                Constants.BIOMETRIC_AUTHENTICATION,
-                Constants.BIOMETRIC_AUTHENTICATION_SUBTITLE,
-                Constants.BIOMETRIC_AUTHENTICATION_DESCRIPTION,
-                false
-            )
-        } else {
-            //Fallback, use device password/pin
-            if (Utilities.deviceHasPasswordPinLock(this)) {
-                initBiometricPrompt(
-                    Constants.PASSWORD_PIN_AUTHENTICATION,
-                    Constants.PASSWORD_PIN_AUTHENTICATION_SUBTITLE,
-                    Constants.PASSWORD_PIN_AUTHENTICATION_DESCRIPTION,
-                    true
-                )
+//        setPrompt()
+//        if (Utilities.isBiometricHardWareAvailable(this)) {
+//            initBiometricPrompt(
+//                Constants.BIOMETRIC_AUTHENTICATION,
+//                Constants.BIOMETRIC_AUTHENTICATION_SUBTITLE,
+//                Constants.BIOMETRIC_AUTHENTICATION_DESCRIPTION,
+//                false
+//            )
+//        } else {
+//            //Fallback, use device password/pin
+//            if (Utilities.deviceHasPasswordPinLock(this)) {
+//                initBiometricPrompt(
+//                    Constants.PASSWORD_PIN_AUTHENTICATION,
+//                    Constants.PASSWORD_PIN_AUTHENTICATION_SUBTITLE,
+//                    Constants.PASSWORD_PIN_AUTHENTICATION_DESCRIPTION,
+//                    true
+//                )
+//            }
+//        }
+
+        setContent {
+            NewsAppTaskTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MyApp {
+                        Navigation()
+                    }
+                }
             }
         }
-
-
     }
 
     private fun setPrompt() {

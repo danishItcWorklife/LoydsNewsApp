@@ -6,9 +6,12 @@ import android.content.Context.KEYGUARD_SERVICE
 import android.os.Build
 import android.util.Log
 import androidx.biometric.BiometricManager
+import java.io.UnsupportedEncodingException
+import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.regex.Pattern
 
 
 object Utilities {
@@ -74,5 +77,48 @@ object Utilities {
 
     fun getStringArray(context: Context, resId: Int): List<String> {
         return context.resources.getStringArray(resId).toList()
+    }
+
+    private val HEX_PATTERN: Pattern = Pattern.compile("%[0-9A-Fa-f]{2}")
+
+    fun safeDecode(data: String?): String? {
+        var decodeData = data
+        if (decodeData.isNullOrEmpty()) {
+            return decodeData
+        }
+
+        // Replace invalid percent-encoded sequences
+        decodeData = decodeData.replace("%(?![0-9A-Fa-f]{2})".toRegex(), "%25")
+        val result = StringBuilder()
+
+        // Iterate through each character in the URL
+        var i = 0
+        while (i < decodeData.length) {
+            val ch = decodeData[i]
+            if (ch == '%' && i + 2 < decodeData.length) {
+                val hex = decodeData.substring(i, i + 3)
+                if (HEX_PATTERN.matcher(hex).matches()) {
+                    result.append(hex)
+                    i += 2
+                } else {
+                    result.append("%25")
+                }
+            } else {
+                result.append(ch)
+            }
+            i++
+        }
+
+        // Decode the sanitized URL
+        return try {
+            URLDecoder.decode(result.toString(), "UTF-8")
+        } catch (e: UnsupportedEncodingException) {
+            throw IllegalArgumentException("Failed to decode URL: Unsupported encoding", e)
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException(
+                "Failed to decode URL: Illegal hex characters in escape (%) pattern",
+                e
+            )
+        }
     }
 }

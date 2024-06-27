@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.loyds.news.data.model.NewsArticle
 import com.loyds.news.presentation.screens.NewsDetailScreen
 import com.loyds.news.presentation.screens.NewsListScreen
+import com.loyds.news.utils.Utilities
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
@@ -32,10 +33,9 @@ fun Navigation() {
         ) {
             it.arguments?.getString("newsArticle")?.let { jsonString ->
                 val gson = Gson()
-                val decoded = URLDecoder.decode(
-                    jsonString,
-                    StandardCharsets.UTF_8.toString()
-                )
+                val decoded = Utilities.safeDecode(
+                    jsonString
+                 )
                 val newsArticle = gson.fromJson(decoded, NewsArticle::class.java)
                 NewsDetailScreen(newsArticle = newsArticle)
             }
