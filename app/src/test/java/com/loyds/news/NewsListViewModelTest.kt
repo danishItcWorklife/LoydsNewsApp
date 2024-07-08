@@ -31,9 +31,6 @@ class NewsListViewModelTest {
 
 
     @Mock
-    private lateinit var networkHelper: NetworkHelper
-
-    @Mock
     private lateinit var getNewsListUseCase: GetNewsListUseCase
 
     private val testDispatcher = coroutineRule.testDispatcher
@@ -45,16 +42,13 @@ class NewsListViewModelTest {
         MockitoAnnotations.openMocks(this)
         viewModel = NewsListViewModel(
             getNewsListUseCase = getNewsListUseCase,
-            networkHelper = networkHelper,
-            coroutinesDispatcherProvider = provideFakeCoroutinesDispatcherProvider(testDispatcher)
+             coroutinesDispatcherProvider = provideFakeCoroutinesDispatcherProvider(testDispatcher)
         )
     }
 
     @Test
     fun `when calling for results then return loading state`() {
         coroutineRule.runBlockingTest {
-            whenever(networkHelper.isNetworkConnected())
-                .thenReturn(true)
             whenever(getNewsListUseCase.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
                 .thenReturn(DataState.Loading())
 
@@ -71,8 +65,6 @@ class NewsListViewModelTest {
     @Test
     fun `when calling for results then return news results`() {
         coroutineRule.runBlockingTest {
-            // Mock network connectivity
-            whenever(networkHelper.isNetworkConnected()).thenReturn(true)
 
             // Mock repository response with a success state containing fake news articles
             val fakeArticles = FakeDataUtil.getFakeArticles().toList()
@@ -96,8 +88,6 @@ class NewsListViewModelTest {
     @Test
     fun `when calling for results then return error`() {
         coroutineRule.runBlockingTest {
-            whenever(networkHelper.isNetworkConnected())
-                .thenReturn(true)
             // Stub repository with fake favorites
             whenever(getNewsListUseCase.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
                 .thenAnswer { DataState.Error("Error occurred", null) }

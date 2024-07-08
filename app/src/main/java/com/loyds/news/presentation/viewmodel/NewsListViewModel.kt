@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
     private val getNewsListUseCase: GetNewsListUseCase,
-    private val networkHelper: NetworkHelper,
+//    private val networkHelper: NetworkHelper,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
