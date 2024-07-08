@@ -20,7 +20,6 @@ import org.mockito.MockitoAnnotations
 
 class GetNewsListUseCaseTest {
     // Mock the repository implementation
-
     private val newsRepository: NewsRepository = mock()
     private lateinit var getNewsListUseCase: GetNewsListUseCase
 
@@ -45,8 +44,8 @@ class GetNewsListUseCaseTest {
         // Mock the repository method to return the expected response
         runBlocking {
             whenever(newsRepository.getNews(anyString(), anyString(), anyInt())).thenReturn(
-                    expectedResponse
-                )
+                expectedResponse
+            )
         }
 
         // Call the method under test
@@ -59,14 +58,15 @@ class GetNewsListUseCaseTest {
     }
 
     @Test
-    fun `when getNews is called with invalid inputs, it returns error`() = runBlocking {
+    fun `when getNews is called with invalid inputs, it returns error`() {
         // Arrange
-        whenever(
-            newsRepository.getNews(
-                Constants.CountryCode, Constants.Category, Constants.DEFAULT_PAGE_INDEX
-            )
-        ).thenAnswer { DataState.Error("Error occurred", null) }
-
+        runBlocking {
+            whenever(
+                newsRepository.getNews(
+                    Constants.CountryCode, Constants.Category, Constants.DEFAULT_PAGE_INDEX
+                )
+            ).thenAnswer { DataState.Error("Error occurred", null) }
+        }
         // Call the method under test
         val actualResponse = runBlocking {
             getNewsListUseCase.getNews(
@@ -89,8 +89,8 @@ class GetNewsListUseCaseTest {
             val expectedResponse = DataState.Loading<List<NewsArticle>>()
 
             whenever(newsRepository.getNews(anyString(), anyString(), anyInt())).thenReturn(
-                    expectedResponse
-                )
+                expectedResponse
+            )
 
             // Act
             val actualResponse = getNewsListUseCase.getNews(countryCode, category, pageNumber)

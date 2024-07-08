@@ -4,7 +4,6 @@ import FakeDataUtil
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.loyds.news.data.local.NewsDao
 import com.loyds.news.data.local.NewsDatabase
-import com.loyds.news.data.model.NewsArticle
 import com.loyds.news.data.model.NewsResponse
 import com.loyds.news.data.network.api.ApiHelper
 import com.loyds.news.data.repository.NewsRepositoryImpl
@@ -12,27 +11,20 @@ import com.loyds.news.domain.repository.NewsRepository
 import com.loyds.news.state.DataState
 import com.loyds.news.utils.Constants
 import com.loyds.news.utils.NetworkHelper
-import com.nhaarman.mockitokotlin2.whenever
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.TestCase
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.test.resetMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito
 import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -61,7 +53,7 @@ class NewsRepositoryImplTest {
         Dispatchers.resetMain()
     }
 
- 
+
     @Test
     fun `getNews network available success response`() = runTest {
 
@@ -126,8 +118,6 @@ class NewsRepositoryImplTest {
 
     @Test
     fun `getNews network unavailable cached news available`() = runTest {
-
-
         // Mock network status
         coEvery { networkUtil.isNetworkConnected() } returns false
 

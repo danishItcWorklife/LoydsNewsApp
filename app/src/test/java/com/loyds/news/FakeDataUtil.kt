@@ -15,12 +15,7 @@ object FakeDataUtil {
         return DataState.Success(newsResponse)
     }
 
-    fun getFakeNewsArticleLiveData(): LiveData<List<NewsArticle>> {
-        val list = MutableLiveData<List<NewsArticle>>()
-        val result: LiveData<List<NewsArticle>> = list
-        list.postValue(getFakeArticles())
-        return result
-    }
+
 
     fun getFakeArticles(): MutableList<NewsArticle> {
         val articleList: MutableList<NewsArticle> = arrayListOf()
@@ -44,14 +39,5 @@ object FakeDataUtil {
         return articleList
     }
 
-    fun getFakeArticle(): NewsArticle {
-        val source1 = Source(
-            id = 1, name = "BBC"
-        )
-        val article1 = NewsArticle(
-            id = 1, author = "A", content = "ABC", description = "Desc1", publishedAt = "",
-            source = source1, title = "Title1", url = "https://google.com", urlToImage = ""
-        )
-        return article1
-    }
+
 }
