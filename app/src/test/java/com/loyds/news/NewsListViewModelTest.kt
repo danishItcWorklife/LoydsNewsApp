@@ -1,7 +1,8 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.loyds.news.data.network.api.NewsApi
-import com.loyds.news.data.repository.NewsRepositoryImpl
+import com.loyds.news.domain.usecase.GetNewsListUseCase
+import com.loyds.news.presentation.intent.NewsIntent
 import com.loyds.news.state.DataState
 import com.loyds.news.presentation.viewmodel.NewsListViewModel
 import com.loyds.news.utils.Constants.Companion.Category
@@ -24,18 +25,16 @@ class NewsListViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Set the main coroutines dispatcher for unit testing.
+    // Main coroutines dispatcher for unit testing.
     @get:Rule
     var coroutineRule = MainCoroutineRule()
 
-    @Mock
-    private lateinit var newsApi: NewsApi
 
     @Mock
     private lateinit var networkHelper: NetworkHelper
 
     @Mock
-    private lateinit var newsRepositoryImpl: NewsRepositoryImpl
+    private lateinit var getNewsListUseCase: GetNewsListUseCase
 
     private val testDispatcher = coroutineRule.testDispatcher
 
@@ -45,7 +44,7 @@ class NewsListViewModelTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         viewModel = NewsListViewModel(
-            repository = newsRepositoryImpl,
+            getNewsListUseCase = getNewsListUseCase,
             networkHelper = networkHelper,
             coroutinesDispatcherProvider = provideFakeCoroutinesDispatcherProvider(testDispatcher)
         )
@@ -56,11 +55,11 @@ class NewsListViewModelTest {
         coroutineRule.runBlockingTest {
             whenever(networkHelper.isNetworkConnected())
                 .thenReturn(true)
-            whenever(newsRepositoryImpl.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
+            whenever(getNewsListUseCase.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
                 .thenReturn(DataState.Loading())
 
             //When
-            viewModel.fetchNews(CountryCode, Category)
+            viewModel.sendIntent(NewsIntent.FetchNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
 
             //Then
             assertThat(viewModel.newsResponse.value).isNotNull()
@@ -78,11 +77,11 @@ class NewsListViewModelTest {
             // Mock repository response with a success state containing fake news articles
             val fakeArticles = FakeDataUtil.getFakeArticles().toList()
             val successResponse = DataState.Success(fakeArticles)
-            whenever(newsRepositoryImpl.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
+            whenever(getNewsListUseCase.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
                 .thenReturn(successResponse)
 
             // Call fetchNews
-            viewModel.fetchNews(CountryCode, Category)
+            viewModel.sendIntent(NewsIntent.FetchNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
 
             // Assert on the ViewModel's state
             assertThat(viewModel.newsResponse.value).isInstanceOf(DataState::class.java)
@@ -100,11 +99,11 @@ class NewsListViewModelTest {
             whenever(networkHelper.isNetworkConnected())
                 .thenReturn(true)
             // Stub repository with fake favorites
-            whenever(newsRepositoryImpl.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
+            whenever(getNewsListUseCase.getNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
                 .thenAnswer { DataState.Error("Error occurred", null) }
 
             //When
-            viewModel.fetchNews(CountryCode, Category)
+            viewModel.sendIntent(NewsIntent.FetchNews(CountryCode, Category, DEFAULT_PAGE_INDEX))
 
             //then
             val response = viewModel.newsResponse.value

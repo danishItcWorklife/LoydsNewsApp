@@ -7,6 +7,7 @@ import com.loyds.news.data.local.NewsDatabase
 import com.loyds.news.data.network.api.ApiHelper
 import com.loyds.news.domain.repository.NewsRepository
 import com.loyds.news.data.repository.NewsRepositoryImpl
+import com.loyds.news.domain.usecase.GetNewsListUseCase
 import com.loyds.news.utils.NetworkHelper
 import dagger.Module
 import dagger.Provides
@@ -39,4 +40,10 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideINewsRepository(repository: NewsRepositoryImpl): NewsRepository = repository
+
+    @Singleton
+    @Provides       
+    fun provideGetNewsUseCase(repository: NewsRepository): GetNewsListUseCase {
+        return GetNewsListUseCase(repository)
+    }
 }

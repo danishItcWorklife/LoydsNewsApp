@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
 import com.loyds.news.R
 import com.loyds.news.data.model.NewsArticle
+import com.loyds.news.presentation.intent.NewsIntent
 import com.loyds.news.state.DataState
 import com.loyds.news.presentation.viewmodel.NewsListViewModel
 import com.loyds.news.utils.Constants
@@ -60,6 +62,19 @@ fun NewsListScreen(
     val categories =
         Utilities.getStringArray(context, R.array.news_categories)
     var selectedCategory by remember { mutableStateOf(categories.first()) }
+
+    // Send initial fetch news intent
+    LaunchedEffect(Unit) {
+        newsListViewModel.sendIntent(
+            NewsIntent.FetchNews(
+                Constants.CountryCode,
+                selectedCategory.lowercase(Locale.getDefault()),
+                Constants.DEFAULT_PAGE_INDEX
+
+            )
+        )
+    }
+
     NewsListScreen(
         newsState = newsState,
         errorMessage = errorMessage,
@@ -70,7 +85,9 @@ fun NewsListScreen(
             selectedCategory = category
             newsListViewModel.fetchNews(
                 Constants.CountryCode,
-                category.lowercase(Locale.getDefault())
+                category.lowercase(Locale.getDefault()),
+                Constants.DEFAULT_PAGE_INDEX
+
             )
         }
     )

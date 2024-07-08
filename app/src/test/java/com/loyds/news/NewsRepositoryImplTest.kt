@@ -4,16 +4,22 @@ import FakeDataUtil
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.loyds.news.data.local.NewsDao
 import com.loyds.news.data.local.NewsDatabase
+import com.loyds.news.data.model.NewsArticle
 import com.loyds.news.data.model.NewsResponse
 import com.loyds.news.data.network.api.ApiHelper
 import com.loyds.news.data.repository.NewsRepositoryImpl
+import com.loyds.news.domain.repository.NewsRepository
 import com.loyds.news.state.DataState
 import com.loyds.news.utils.Constants
 import com.loyds.news.utils.NetworkHelper
+import com.nhaarman.mockitokotlin2.whenever
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -24,6 +30,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.Mockito
 import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,7 +43,7 @@ class NewsRepositoryImplTest {
 
     private val dispatcher = StandardTestDispatcher()
 
-    private lateinit var newsRepositoryImpl: NewsRepositoryImpl
+    private lateinit var newsRepository: NewsRepository
     private val newsDao: NewsDao = mockk()
     private val remoteDataSource: ApiHelper = mockk()
     private val networkUtil: NetworkHelper = mockk()
@@ -44,17 +53,17 @@ class NewsRepositoryImplTest {
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         every { newsDatabase.getNewsDao() } returns newsDao
-        newsRepositoryImpl = NewsRepositoryImpl(remoteDataSource, networkUtil, newsDatabase)
-     }
+        newsRepository = NewsRepositoryImpl(remoteDataSource, networkUtil, newsDatabase)
+    }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
+ 
     @Test
     fun `getNews network available success response`() = runTest {
-
 
         // Mock network status
         coEvery { networkUtil.isNetworkConnected() } returns true
@@ -68,7 +77,7 @@ class NewsRepositoryImplTest {
         coEvery { newsDao.upsert(any()) } returns Unit
 
         // Call the method
-        val result = newsRepositoryImpl.getNews(
+        val result = newsRepository.getNews(
             Constants.CountryCode,
             Constants.Category,
             Constants.DEFAULT_PAGE_INDEX
@@ -98,7 +107,7 @@ class NewsRepositoryImplTest {
         )
 
         // Call the method
-        val result = newsRepositoryImpl.getNews(
+        val result = newsRepository.getNews(
             Constants.CountryCode,
             Constants.Category,
             Constants.DEFAULT_PAGE_INDEX
@@ -127,7 +136,7 @@ class NewsRepositoryImplTest {
         coEvery { newsDao.getNewsByCategory(any()) } returns cachedArticles
 
         // Call the method
-        val result = newsRepositoryImpl.getNews(
+        val result = newsRepository.getNews(
             Constants.CountryCode,
             Constants.Category,
             Constants.DEFAULT_PAGE_INDEX
@@ -149,7 +158,7 @@ class NewsRepositoryImplTest {
         coEvery { newsDao.getNewsByCategory(any()) } returns emptyList()
 
         // Call the method
-        val result = newsRepositoryImpl.getNews(
+        val result = newsRepository.getNews(
             Constants.CountryCode,
             Constants.Category,
             Constants.DEFAULT_PAGE_INDEX
